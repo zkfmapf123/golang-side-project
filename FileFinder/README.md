@@ -10,3 +10,9 @@
 
 ### Chmod Calculator
 - https://chmod-calculator.com
+
+### Execute
+
+```
+    go run main.go .
+```
