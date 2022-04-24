@@ -118,3 +118,9 @@
 	}
 
 ```
+
+### Spam Maker Execution
+
+```
+	go run main.go
+```

@@ -2,33 +2,69 @@ package main
 
 import (
 	"fmt"
-	"unsafe"
+	"io/ioutil"
+	"strings"
 )
 
-type StringHeader struct {
-	pointer uintptr // start
-	length  int     // end
-}
+var MASK rune = '*'
 
 func main() {
+	bytes, err := ioutil.ReadFile("spam.txt")
 
-	// 문자열이 같다면 -> 같은 곳을 쳐다보고있다.
-	str := "hello"
-	dump(str)      // same
-	dump("hello")  // same
-	dump("hello!") // different
-
-	for i := range str {
-		dump(str[0:i])
+	if err != nil {
+		panic(err)
 	}
 
-	// byte는 다른 포인터 주소로 잡는다
-	dump(string([]byte(str)))
-	dump(string([]byte(str[0:2])))
-	dump(string([]byte(str[0:4])))
+	urls := strings.Split(string(bytes), "\n")
+
+	for _, url := range urls {
+		printMaskUrl(url)
+
+	}
 }
 
-func dump(str string) {
-	ptr := *(*StringHeader)(unsafe.Pointer(&str))
-	fmt.Printf("%q : %+v\n", str, ptr)
+func printMaskUrl(url string) {
+
+	rs := []rune(url)
+	startIndex, endIndex := getMaskStart(rs)
+	urls := make([]rune, endIndex-startIndex)
+
+	for i, r := range rs[startIndex:endIndex] {
+		urls[i] = r
+	}
+
+	splitUrls := strings.Split(string(urls), ".")
+	newEndIndex := len(splitUrls[0]) + len(splitUrls[1])
+
+	// fmt.Println(startIndex+len(splitUrls[0]), startIndex+newEndIndex)
+
+	for i, r := range rs {
+
+		if i > startIndex+len(splitUrls[0]) && i <= startIndex+newEndIndex {
+			fmt.Printf("%c", MASK)
+		} else {
+			fmt.Printf("%c", r)
+		}
+
+	}
+	fmt.Println()
+}
+
+func getMaskStart(urls []rune) (int, int) {
+
+	var count int = 0
+	var index int
+	for i, url := range urls {
+
+		if url == '/' {
+			count += 1
+		}
+
+		if count == 2 {
+			index = i
+			break
+		}
+	}
+
+	return index + 1, len(urls)
 }
