@@ -17,3 +17,7 @@
 ### Go-Server
 
 - http + SSR 서버
+
+### CRUD-API
+
+- Gin + Backend Layer
