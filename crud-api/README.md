@@ -3,7 +3,7 @@
 ## USE
 
 - Gin
-- GORM (MySQL)
+- 간단하게 구조 및 GetAllMovies만...
 
 ## Router
 
