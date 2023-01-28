@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  go-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: golang
+    restart: always
+    ports:
+      - '8080:8080'
